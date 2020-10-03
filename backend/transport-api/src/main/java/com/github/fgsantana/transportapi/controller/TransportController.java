@@ -1,7 +1,7 @@
 package com.github.fgsantana.transportapi.controller;
 
 import com.github.fgsantana.transportapi.entity.Transport;
-import com.github.fgsantana.transportapi.repository.TransportRepository;
+import com.github.fgsantana.transportapi.service.TransportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -9,22 +9,22 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/transports")
 public class TransportController {
-    private TransportRepository repo;
+    private TransportService service;
 
     @Autowired
-    public TransportController(TransportRepository transportRepository){
-        this.repo = transportRepository;
+    public TransportController(TransportService transportService){
+        this.service = transportService;
     }
 
     @GetMapping
     public List<Transport> getTransports(){
-        return repo.findAll();
+        return service.getTransports();
 
     }
 
     @PostMapping
     public Transport saveTransport(@RequestBody Transport transport){
-        return repo.save(transport);
+        return service.saveTransport(transport);
     }
 
 
