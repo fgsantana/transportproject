@@ -20,7 +20,7 @@ public class Transport {
 
     private String telefone;
 
-    @Column(nullable = true)
+
     private String celular;
 
     private String whatsapp;
