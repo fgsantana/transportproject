@@ -4,34 +4,35 @@ import com.github.fgsantana.transportapi.entity.Transport;
 import com.github.fgsantana.transportapi.service.TransportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/transports")
-public class TransportController {
+public class TransportResource {
     private TransportService service;
 
     @Autowired
-    public TransportController(TransportService transportService){
+    public TransportResource(TransportService transportService) {
         this.service = transportService;
     }
 
     @GetMapping
-    public List<Transport> getTransports(){
+    public List<Transport> getTransports() {
         return service.getTransports();
 
     }
 
-    @PostMapping
-    public Transport saveTransport(@RequestBody Transport transport){
-        return service.saveTransport(transport);
+    @GetMapping("/{id}")
+    public Transport getTransportById(@PathVariable("id") Long id) {
+        return service.getTransportById(id);
     }
 
 
-
-
-
-
+    @PostMapping
+    public Transport saveTransport(@RequestBody Transport transport) {
+        return service.saveTransport(transport);
+    }
 
 
 }
