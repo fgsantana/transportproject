@@ -2,6 +2,7 @@ package com.github.fgsantana.transportapi.service;
 
 import com.github.fgsantana.transportapi.dto.TransportDTO;
 import com.github.fgsantana.transportapi.entity.Transport;
+import com.github.fgsantana.transportapi.exception.TransportNotFoundException;
 import com.github.fgsantana.transportapi.message.ResponseMessage;
 import com.github.fgsantana.transportapi.repository.TransportRepository;
 import org.modelmapper.ModelMapper;
@@ -27,8 +28,8 @@ public class TransportService {
 
     public TransportDTO getTransportById(Long id) {
 
-        Transport savedTransport = repo.findById(id).orElseThrow();
-        return mapper.map(savedTransport, TransportDTO.class);
+        Transport transport = repo.findById(id).orElseThrow(() -> new TransportNotFoundException(id));
+        return mapper.map(transport, TransportDTO.class);
     }
 
     public TransportDTO saveTransport(TransportDTO transportDTO) {
@@ -40,24 +41,27 @@ public class TransportService {
     public TransportDTO updateTransportById(Long id, TransportDTO transportDTO) {
 
         transportDTO.setId(id);
-        Transport transport = repo.findById(id).orElseThrow();
+        Transport transport = repo.findById(id).orElseThrow(() -> new TransportNotFoundException(id));
         mapper.map(transportDTO, transport);
 
         return mapper.map(repo.save(transport), TransportDTO.class);
     }
 
     public ResponseMessage deleteTransportById(Long id) {
+        if (!repo.existsById(id)) {
+            throw new TransportNotFoundException(id);
+        }
         repo.deleteById(id);
         return new ResponseMessage("Transportador com id " + id + " excluída");
     }
 
     public byte[] getLogoByTransportId(Long id) {
-        Transport transport = repo.findById(id).orElseThrow();
+        Transport transport = repo.findById(id).orElseThrow(() -> new TransportNotFoundException(id));
         return transport.getLogo();
     }
 
     public byte[] insertLogoOnTransportById(Long id, byte[] logo) {
-        Transport transport = repo.findById(id).orElseThrow();
+        Transport transport = repo.findById(id).orElseThrow(() -> new TransportNotFoundException(id));
         transport.setLogo(logo);
         return repo.save(transport).getLogo();
     }
