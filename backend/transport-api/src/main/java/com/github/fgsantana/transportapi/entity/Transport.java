@@ -42,7 +42,6 @@ public class Transport {
     private int numero;
 
     @Lob
-    @Basic(fetch = FetchType.LAZY)
     private byte[] logo;
 
     public Long getId() {
