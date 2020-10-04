@@ -1,6 +1,7 @@
 package com.github.fgsantana.transportapi.resource;
 
 import com.github.fgsantana.transportapi.dto.TransportDTO;
+import com.github.fgsantana.transportapi.message.ResponseMessage;
 import com.github.fgsantana.transportapi.service.TransportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,16 @@ public class TransportResource {
     @PostMapping
     public TransportDTO saveTransport(@Valid @RequestBody TransportDTO transportDTO) {
         return service.saveTransport(transportDTO);
+    }
+
+    @PutMapping("/{id}")
+    public TransportDTO updateTransportById(@PathVariable("id") Long id, @Valid @RequestBody TransportDTO transportDTO){
+        return service.updateTransportById(id,transportDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseMessage deleteTransportById(@PathVariable("id") Long id){
+        return service.deleteTransportById(id);
     }
 
 

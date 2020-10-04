@@ -2,6 +2,7 @@ package com.github.fgsantana.transportapi.service;
 
 import com.github.fgsantana.transportapi.dto.TransportDTO;
 import com.github.fgsantana.transportapi.entity.Transport;
+import com.github.fgsantana.transportapi.message.ResponseMessage;
 import com.github.fgsantana.transportapi.repository.TransportRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +37,14 @@ public class TransportService {
     }
 
 
+    public TransportDTO updateTransportById(Long id, TransportDTO transportDTO) {
+        Transport transport = mapper.map(transportDTO,Transport.class);
+        transport.setId(id);
+        return mapper.map(repo.save(transport),TransportDTO.class);
+    }
 
+    public ResponseMessage deleteTransportById(Long id) {
+        repo.deleteById(id);
+        return new ResponseMessage("Transportador com id " + id + " excluída");
+    }
 }
