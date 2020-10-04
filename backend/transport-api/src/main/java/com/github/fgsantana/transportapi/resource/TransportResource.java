@@ -1,4 +1,4 @@
-package com.github.fgsantana.transportapi.controller;
+package com.github.fgsantana.transportapi.resource;
 
 import com.github.fgsantana.transportapi.dto.TransportDTO;
 import com.github.fgsantana.transportapi.service.TransportService;
@@ -31,6 +31,10 @@ public class TransportResource {
     public TransportDTO saveTransport(@Valid @RequestBody TransportDTO transportDTO) {
         return service.saveTransport(transportDTO);
     }
+
+
+
+
 
 
 }

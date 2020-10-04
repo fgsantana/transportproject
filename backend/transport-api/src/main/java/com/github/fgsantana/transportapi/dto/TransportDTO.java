@@ -1,15 +1,14 @@
 package com.github.fgsantana.transportapi.dto;
 
 
-import javax.persistence.*;
+import com.github.fgsantana.transportapi.entity.Modal;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.List;
 
 public class TransportDTO {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
 
@@ -35,9 +34,8 @@ public class TransportDTO {
     @Size(min = 10, max = 11)
     private String whatsapp;
 
-    @Enumerated(EnumType.STRING)
     @NotEmpty
-    private List<ModalDTO> modais;
+    private List<Modal> modais;
 
     @Size(min = 8, max = 8)
     private String cep;
@@ -113,11 +111,11 @@ public class TransportDTO {
         this.whatsapp = whatsapp;
     }
 
-    public List<ModalDTO> getModais() {
+    public List<Modal> getModais() {
         return modais;
     }
 
-    public void setModais(List<ModalDTO> modais) {
+    public void setModais(List<Modal> modais) {
         this.modais = modais;
     }
 

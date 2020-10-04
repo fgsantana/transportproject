@@ -25,8 +25,8 @@ public class Transport {
 
     private String whatsapp;
 
+    @ElementCollection
     @Enumerated(EnumType.STRING)
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Modal> modais;
 
     private String cep;
@@ -101,13 +101,15 @@ public class Transport {
         this.whatsapp = whatsapp;
     }
 
-    public List<Modal> getModais() {
-        return modais;
-    }
 
     public void setModais(List<Modal> modais) {
         this.modais = modais;
     }
+
+    public List<Modal> getModais() {
+        return modais;
+    }
+
 
     public String getCep() {
         return cep;

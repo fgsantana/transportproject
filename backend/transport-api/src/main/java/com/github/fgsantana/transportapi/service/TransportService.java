@@ -1,13 +1,11 @@
 package com.github.fgsantana.transportapi.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fgsantana.transportapi.dto.TransportDTO;
 import com.github.fgsantana.transportapi.entity.Transport;
 import com.github.fgsantana.transportapi.repository.TransportRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,5 +34,7 @@ public class TransportService {
         Transport transport = mapper.map(transportDTO, Transport.class);
         return mapper.map(repo.save(transport),TransportDTO.class);
     }
+
+
 
 }
