@@ -39,9 +39,11 @@ public class TransportService {
 
     public TransportDTO updateTransportById(Long id, TransportDTO transportDTO) {
 
-        Transport transport = mapper.map(transportDTO,Transport.class);
-        transport.setId(id);
-        return mapper.map(repo.save(transport),TransportDTO.class);
+        transportDTO.setId(id);
+        Transport transport = repo.findById(id).orElseThrow();
+        mapper.map(transportDTO, transport);
+
+        return mapper.map(repo.save(transport), TransportDTO.class);
     }
 
     public ResponseMessage deleteTransportById(Long id) {
