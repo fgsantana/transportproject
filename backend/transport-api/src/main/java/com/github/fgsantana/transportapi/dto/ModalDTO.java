@@ -12,7 +12,7 @@ public class ModalDTO {
 
     @Enumerated(EnumType.STRING)
     @NotEmpty
-    private ModalType tipo;
+    private ModalType modal;
 
     public Long getId() {
         return id;
@@ -22,11 +22,11 @@ public class ModalDTO {
         this.id = id;
     }
 
-    public ModalType getTipo() {
-        return tipo;
+    public ModalType getmodal() {
+        return modal;
     }
 
-    public void setTipo(ModalType tipo) {
-        this.tipo = tipo;
+    public void setmodal(ModalType modal) {
+        this.modal = modal;
     }
 }

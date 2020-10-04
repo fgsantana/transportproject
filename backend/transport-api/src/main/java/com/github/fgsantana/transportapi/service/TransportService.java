@@ -1,33 +1,40 @@
 package com.github.fgsantana.transportapi.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fgsantana.transportapi.dto.TransportDTO;
 import com.github.fgsantana.transportapi.entity.Transport;
 import com.github.fgsantana.transportapi.repository.TransportRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TransportService {
-    private TransportRepository repo;
+
+    ModelMapper mapper = new ModelMapper();
 
     @Autowired
-    public TransportService(TransportRepository transportRepository) {
-        this.repo = transportRepository;
+    TransportRepository repo;
+
+    public List<TransportDTO> getTransports() {
+        List<Transport> list= repo.findAll();
+        return list.stream().map(t-> mapper.map(t,TransportDTO.class)).collect(Collectors.toList());
     }
 
-    public List<Transport> getTransports() {
-        return repo.findAll();
-    }
 
+    public TransportDTO getTransportById(Long id) {
 
-    public Transport getTransportById(Long id) {
         Transport transport = repo.findById(id).orElseThrow();
-        return transport;
+        TransportDTO transportDTO = mapper.map(transport,TransportDTO.class);
+        return transportDTO;
     }
 
-    public Transport saveTransport(Transport transport) {
-        return repo.save(transport);
+    public TransportDTO saveTransport(TransportDTO transportDTO) {
+        Transport transport = mapper.map(transportDTO, Transport.class);
+        return mapper.map(repo.save(transport),TransportDTO.class);
     }
 
 }

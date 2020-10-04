@@ -1,8 +1,6 @@
 package com.github.fgsantana.transportapi.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -162,6 +160,7 @@ public class Transport {
     public byte[] getLogo() {
         return logo;
     }
+
 
     public void setLogo(byte[] logo) {
         this.logo = logo;
