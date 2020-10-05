@@ -3,6 +3,8 @@ package com.github.fgsantana.transportapi.resource;
 import com.github.fgsantana.transportapi.client.RestTemplateClient;
 import com.github.fgsantana.transportapi.dto.EnderecoDTO;
 import com.github.fgsantana.transportapi.dto.TransportDTO;
+import com.github.fgsantana.transportapi.exception.CepNotFoundException;
+import com.github.fgsantana.transportapi.exception.InvalidCepFormatException;
 import com.github.fgsantana.transportapi.message.ResponseMessage;
 import com.github.fgsantana.transportapi.service.TransportService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +66,7 @@ public class TransportResource {
     }
 
     @GetMapping("/adress/{cep}")
-    public EnderecoDTO getAdressByCep(@PathVariable("cep") Long cep) {
+    public EnderecoDTO getAdressByCep(@PathVariable("cep") Long cep) throws CepNotFoundException, InvalidCepFormatException {
 
         return service.getAdressByCep(cep);
     }

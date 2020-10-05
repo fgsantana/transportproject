@@ -4,6 +4,8 @@ import com.github.fgsantana.transportapi.client.RestTemplateClient;
 import com.github.fgsantana.transportapi.dto.EnderecoDTO;
 import com.github.fgsantana.transportapi.dto.TransportDTO;
 import com.github.fgsantana.transportapi.entity.Transport;
+import com.github.fgsantana.transportapi.exception.CepNotFoundException;
+import com.github.fgsantana.transportapi.exception.InvalidCepFormatException;
 import com.github.fgsantana.transportapi.exception.TransportNotFoundException;
 import com.github.fgsantana.transportapi.message.ResponseMessage;
 import com.github.fgsantana.transportapi.repository.TransportRepository;
@@ -75,8 +77,10 @@ public class TransportService {
         return repo.save(transport).getLogo();
     }
 
-    public EnderecoDTO getAdressByCep(Long cep) {
-
+    public EnderecoDTO getAdressByCep(Long cep) throws InvalidCepFormatException, CepNotFoundException {
+        if (cep.toString().length() != 8) {
+            throw new InvalidCepFormatException();
+        }
 
         return client.getAdress(cep);
     }
