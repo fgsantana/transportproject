@@ -37,7 +37,7 @@ public class TransportDTO {
     @NotEmpty
     private List<Modal> modais;
 
-    @Size(min = 8, max = 8)
+    @Size(min = 8, max = 9)
     private String cep;
 
     @NotEmpty

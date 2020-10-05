@@ -1,5 +1,7 @@
 package com.github.fgsantana.transportapi.resource;
 
+import com.github.fgsantana.transportapi.client.RestTemplateClient;
+import com.github.fgsantana.transportapi.dto.EnderecoDTO;
 import com.github.fgsantana.transportapi.dto.TransportDTO;
 import com.github.fgsantana.transportapi.message.ResponseMessage;
 import com.github.fgsantana.transportapi.service.TransportService;
@@ -13,12 +15,16 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/v1/transports")
 public class TransportResource {
 
     @Autowired
     TransportService service;
+
+    @Autowired
+    RestTemplateClient client;
 
     @GetMapping
     public List<TransportDTO> getTransports() {
@@ -43,7 +49,7 @@ public class TransportResource {
     }
 
     @PutMapping(value = "/{id}/logo", produces = MediaType.IMAGE_JPEG_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public byte[] insertLogoOnTransportById(@PathVariable("id") Long id, MultipartFile logoImg) throws IOException {
+    public byte[] insertLogoOnTransportById(@PathVariable("id") Long id, @RequestBody MultipartFile logoImg) throws IOException {
         return service.insertLogoOnTransportById(id, logoImg.getBytes());
     }
 
@@ -55,6 +61,12 @@ public class TransportResource {
     @DeleteMapping("/{id}")
     public ResponseMessage deleteTransportById(@PathVariable("id") Long id) {
         return service.deleteTransportById(id);
+    }
+
+    @GetMapping("/adress/{cep}")
+    public EnderecoDTO getAdressByCep(@PathVariable("cep") Long cep) {
+
+        return service.getAdressByCep(cep);
     }
 
 

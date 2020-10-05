@@ -1,12 +1,13 @@
 package com.github.fgsantana.transportapi.service;
 
+import com.github.fgsantana.transportapi.client.RestTemplateClient;
+import com.github.fgsantana.transportapi.dto.EnderecoDTO;
 import com.github.fgsantana.transportapi.dto.TransportDTO;
 import com.github.fgsantana.transportapi.entity.Transport;
 import com.github.fgsantana.transportapi.exception.TransportNotFoundException;
 import com.github.fgsantana.transportapi.message.ResponseMessage;
 import com.github.fgsantana.transportapi.repository.TransportRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +18,16 @@ public class TransportService {
 
     ModelMapper mapper = new ModelMapper();
 
-    @Autowired
+    final
     TransportRepository repo;
+
+    final
+    RestTemplateClient client;
+
+    public TransportService(TransportRepository repo, RestTemplateClient client) {
+        this.repo = repo;
+        this.client = client;
+    }
 
     public List<TransportDTO> getTransports() {
         List<Transport> list = repo.findAll();
@@ -64,5 +73,11 @@ public class TransportService {
         Transport transport = repo.findById(id).orElseThrow(() -> new TransportNotFoundException(id));
         transport.setLogo(logo);
         return repo.save(transport).getLogo();
+    }
+
+    public EnderecoDTO getAdressByCep(Long cep) {
+
+
+        return client.getAdress(cep);
     }
 }
