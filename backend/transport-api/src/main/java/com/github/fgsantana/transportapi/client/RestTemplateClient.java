@@ -7,15 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
-
 
 @Service
 public class RestTemplateClient {
 
     @Autowired
-    RestTemplate restTemplate;
-
+    private RestTemplate restTemplate;
 
 
     public EnderecoDTO getAdress(Long cep) throws CepNotFoundException {

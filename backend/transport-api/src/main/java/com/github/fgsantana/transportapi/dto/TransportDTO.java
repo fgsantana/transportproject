@@ -37,7 +37,7 @@ public class TransportDTO {
     @NotEmpty
     private List<Modal> modais;
 
-    @Size(min = 8, max = 9)
+    @Size(min = 8, max = 8)
     private String cep;
 
     @NotEmpty
@@ -53,7 +53,18 @@ public class TransportDTO {
     @NotEmpty
     private String logradouro;
 
+    private String logoUrl;
+
+    public void setLogoUrl(String logoUrl) {
+        this.logoUrl = logoUrl;
+    }
+
+    public String getLogoUrl() {
+        return logoUrl;
+    }
+
     private int numero;
+
 
     public Long getId() {
         return id;

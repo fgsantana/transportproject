@@ -10,6 +10,7 @@ import com.github.fgsantana.transportapi.exception.TransportNotFoundException;
 import com.github.fgsantana.transportapi.message.ResponseMessage;
 import com.github.fgsantana.transportapi.repository.TransportRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,32 +21,29 @@ public class TransportService {
 
     ModelMapper mapper = new ModelMapper();
 
-    final
-    TransportRepository repo;
+    @Autowired
+    private TransportRepository repo;
 
-    final
-    RestTemplateClient client;
+    @Autowired
+    private RestTemplateClient client;
 
-    public TransportService(TransportRepository repo, RestTemplateClient client) {
-        this.repo = repo;
-        this.client = client;
-    }
 
     public List<TransportDTO> getTransports() {
         List<Transport> list = repo.findAll();
-        return list.stream().map(t -> mapper.map(t, TransportDTO.class)).collect(Collectors.toList());
+        return list.stream().map(this::mapDTOSetLogoUrl).collect(Collectors.toList());
     }
 
 
     public TransportDTO getTransportById(Long id) {
 
         Transport transport = repo.findById(id).orElseThrow(() -> new TransportNotFoundException(id));
-        return mapper.map(transport, TransportDTO.class);
+        return this.mapDTOSetLogoUrl(transport);
     }
 
     public TransportDTO saveTransport(TransportDTO transportDTO) {
+
         Transport transport = mapper.map(transportDTO, Transport.class);
-        return mapper.map(repo.save(transport), TransportDTO.class);
+        return this.mapDTOSetLogoUrl(repo.save(transport));
     }
 
 
@@ -83,5 +81,12 @@ public class TransportService {
         }
 
         return client.getAdress(cep);
+    }
+
+
+    private TransportDTO mapDTOSetLogoUrl(Transport transport) {
+        TransportDTO dto = mapper.map(transport, TransportDTO.class);
+        dto.setLogoUrl("http://localhost:8080/api/v1/transports/" + dto.getId() + "/logo");
+        return dto;
     }
 }

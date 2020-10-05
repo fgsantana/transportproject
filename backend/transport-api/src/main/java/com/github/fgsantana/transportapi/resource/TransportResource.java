@@ -1,6 +1,5 @@
 package com.github.fgsantana.transportapi.resource;
 
-import com.github.fgsantana.transportapi.client.RestTemplateClient;
 import com.github.fgsantana.transportapi.dto.EnderecoDTO;
 import com.github.fgsantana.transportapi.dto.TransportDTO;
 import com.github.fgsantana.transportapi.exception.CepNotFoundException;
@@ -23,10 +22,8 @@ import java.util.List;
 public class TransportResource {
 
     @Autowired
-    TransportService service;
+    private TransportService service;
 
-    @Autowired
-    RestTemplateClient client;
 
     @GetMapping
     public List<TransportDTO> getTransports() {
