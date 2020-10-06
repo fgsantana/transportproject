@@ -25,7 +25,7 @@ public class Transport {
 
     private String whatsapp;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     private List<Modal> modais;
 

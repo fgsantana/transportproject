@@ -12,11 +12,12 @@ public enum Modal {
         return tipo;
     }
 
-    Modal(String tipo) {
+     Modal(String tipo) {
         this.tipo = tipo;
     }
 
     private String tipo;
+
 
 
 }
