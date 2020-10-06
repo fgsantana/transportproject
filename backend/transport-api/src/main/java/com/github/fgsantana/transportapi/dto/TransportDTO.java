@@ -7,6 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Objects;
 
 public class TransportDTO {
     private Long id;
@@ -178,5 +179,30 @@ public class TransportDTO {
         this.numero = numero;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TransportDTO)) return false;
+        TransportDTO that = (TransportDTO) o;
+        return numero == that.numero &&
+                id.equals(that.id) &&
+                email.equals(that.email) &&
+                nome.equals(that.nome) &&
+                empresa.equals(that.empresa) &&
+                telefone.equals(that.telefone) &&
+                Objects.equals(celular, that.celular) &&
+                Objects.equals(whatsapp, that.whatsapp) &&
+                modais.equals(that.modais) &&
+                cep.equals(that.cep) &&
+                uf.equals(that.uf) &&
+                cidade.equals(that.cidade) &&
+                Objects.equals(bairro, that.bairro) &&
+                logradouro.equals(that.logradouro) &&
+                Objects.equals(logoUrl, that.logoUrl);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, nome, empresa, telefone, celular, whatsapp, modais, cep, uf, cidade, bairro, logradouro, logoUrl, numero);
+    }
 }
