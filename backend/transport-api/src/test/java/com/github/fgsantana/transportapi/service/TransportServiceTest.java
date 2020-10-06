@@ -2,16 +2,18 @@ package com.github.fgsantana.transportapi.service;
 
 import com.github.fgsantana.transportapi.dto.TransportDTO;
 import com.github.fgsantana.transportapi.entity.Transport;
+import com.github.fgsantana.transportapi.exception.TransportNotFoundException;
 import com.github.fgsantana.transportapi.message.ResponseMessage;
 import com.github.fgsantana.transportapi.repository.TransportRepository;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
-import static com.github.fgsantana.transportapi.util.TransportUtil.createFakeDTO;
+import static com.github.fgsantana.transportapi.util.TransportUtil.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -24,22 +26,22 @@ public class TransportServiceTest {
     @Autowired
     TransportRepository repo;
 
-    ModelMapper mapper = new ModelMapper();
 
     @Test
     public void testIfIsSaved() {
-        TransportDTO dtoToSave = createFakeDTO();
+        TransportDTO dtoToSave = createTestDTO();
         TransportDTO savedDTO = service.saveTransport(dtoToSave);
         setAsReturnedDTO(dtoToSave, savedDTO);
         assertTrue(repo.existsById(savedDTO.getId()));
-        Transport transport = repo.findById(savedDTO.getId()).get();
+        Transport transport = repo.findById(savedDTO.getId()).orElseThrow(() -> new TransportNotFoundException(savedDTO.getId()));
+        ;
         assert (toDTO(transport).equals(dtoToSave));
 
     }
 
     @Test
     public void testIfIsOnTheDtoList() {
-        TransportDTO dtoToSave = createFakeDTO();
+        TransportDTO dtoToSave = createTestDTO();
         TransportDTO savedDTO = service.saveTransport(dtoToSave);
         setAsReturnedDTO(dtoToSave, savedDTO);
         List<TransportDTO> list = service.getTransports();
@@ -48,42 +50,48 @@ public class TransportServiceTest {
 
     @Test
     public void testIfIsDeleted() {
-        TransportDTO dtoToDelete = createFakeDTO();
+        TransportDTO dtoToDelete = createTestDTO();
         Transport savedTransport = repo.save(mapper.map(dtoToDelete, Transport.class));
         TransportDTO savedDTO = toDTO(savedTransport);
         setAsReturnedDTO(dtoToDelete, savedDTO);
         ResponseMessage msg = service.deleteTransportById(savedTransport.getId());
-        assertEquals("Transportadora com id " + savedTransport.getId() + " excluída", msg.getMessage());
+        assertEquals("Transportadora com id " + savedTransport.getId() + " excluída!", msg.getMessage());
         assertFalse(repo.existsById(savedTransport.getId()));
-        assertFalse(repo.findAll().contains(dtoToDelete));
 
     }
 
     @Test
     public void testIfUpdated() {
-        TransportDTO initialDTO = createFakeDTO();
+        TransportDTO initialDTO = createTestDTO();
         Transport savedTransport = repo.save(mapper.map(initialDTO, Transport.class));
         TransportDTO updateDTO = toDTO(savedTransport);
         updateDTO.setEmail("updatedEmail@gmail.com");
         updateDTO.setNome("updatedName");
         service.updateTransportById(savedTransport.getId(), updateDTO);
-        Transport transport = repo.findById(savedTransport.getId()).get();
+        Transport transport = repo.findById(savedTransport.getId()).orElseThrow(() -> new TransportNotFoundException(savedTransport.getId()));
+
         assert (toDTO(transport).equals(updateDTO));
     }
 
-
-    private void setAsReturnedDTO(TransportDTO targetDTO, TransportDTO sourceDTO) {
-        targetDTO.setId(sourceDTO.getId());
-        targetDTO.setLogoUrl(sourceDTO.getLogoUrl());
+    @Test
+    public void testIfLogoContentIsProperlySaved() throws IOException {
+        byte[] content = createTestImg();
+        Transport entity = createTestEntity();
+        Long id = repo.save(entity).getId();
+        service.insertLogoOnTransportById(id, content);
+        assert (Arrays.equals(repo.getLogoByid(id), content));
     }
 
-    private TransportDTO toDTO(Transport transport) {
-
-        TransportDTO dto = mapper.map(transport, TransportDTO.class);
-
-        dto.setLogoUrl("http://localhost:8080/api/v1/transports/" + dto.getId() + "/logo");
-        return dto;
+    @Test
+    public void testIfLogoContentIsProperlyReturned() throws IOException {
+        byte[] content = createTestImg();
+        Transport entity = createTestEntity();
+        entity.setLogo(content);
+        Long id = repo.save(entity).getId();
+        byte[] returnedFromService = service.getLogoByTransportId(id);
+        assert (Arrays.equals(content, returnedFromService));
     }
+
 
 }
 

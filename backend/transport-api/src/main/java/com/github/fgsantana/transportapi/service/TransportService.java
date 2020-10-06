@@ -49,9 +49,7 @@ public class TransportService {
 
 
     public TransportDTO updateTransportById(Long id, TransportDTO transportDTO) {
-        if (!repo.existsById(id)) {
-            throw new TransportNotFoundException(id);
-        }
+        exists(id);
         transportDTO.setId(id);
         Transport transport = repo.findById(id).orElseThrow(() -> new TransportNotFoundException(id));
         mapper.map(transportDTO, transport);
@@ -59,22 +57,21 @@ public class TransportService {
     }
 
     public ResponseMessage deleteTransportById(Long id) {
-        if (!repo.existsById(id)) {
-            throw new TransportNotFoundException(id);
-        }
+        exists(id);
         repo.deleteById(id);
-        return new ResponseMessage("Transportadora com id " + id + " excluída");
+        return new ResponseMessage("Transportadora com id " + id + " excluída!");
     }
 
     public byte[] getLogoByTransportId(Long id) {
-        Transport transport = repo.findById(id).orElseThrow(() -> new TransportNotFoundException(id));
-        return transport.getLogo();
+        exists(id);
+        return repo.getLogoByid(id);
     }
 
-    public byte[] insertLogoOnTransportById(Long id, byte[] logo) {
+    public ResponseMessage insertLogoOnTransportById(Long id, byte[] logo) {
         Transport transport = repo.findById(id).orElseThrow(() -> new TransportNotFoundException(id));
         transport.setLogo(logo);
-        return repo.save(transport).getLogo();
+        repo.save(transport);
+        return new ResponseMessage("Logo da transportadora de id " + id + " salva!");
     }
 
     public EnderecoDTO getAdressByCep(Long cep) throws InvalidCepFormatException, CepNotFoundException {
@@ -86,11 +83,16 @@ public class TransportService {
     }
 
 
-    public TransportDTO mapDTOSetLogoUrl(Transport transport) {
+    private TransportDTO mapDTOSetLogoUrl(Transport transport) {
         TransportDTO dto = mapper.map(transport, TransportDTO.class);
-
         dto.setLogoUrl("http://localhost:8080/api/v1/transports/" + dto.getId() + "/logo");
         return dto;
+    }
+
+    private void exists(Long id) {
+        if (!repo.existsById(id)) {
+            throw new TransportNotFoundException(id);
+        }
     }
 
 }

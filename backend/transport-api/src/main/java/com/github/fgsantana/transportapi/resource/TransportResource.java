@@ -47,8 +47,8 @@ public class TransportResource {
         return service.saveTransport(transportDTO);
     }
 
-    @PutMapping(value = "/{id}/logo", produces = MediaType.IMAGE_JPEG_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public byte[] insertLogoOnTransportById(@PathVariable("id") Long id, @RequestBody MultipartFile logoImg) throws IOException {
+    @PutMapping(value = "/{id}/logo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseMessage insertLogoOnTransportById(@PathVariable("id") Long id, @RequestBody MultipartFile logoImg) throws IOException {
         return service.insertLogoOnTransportById(id, logoImg.getBytes());
     }
 

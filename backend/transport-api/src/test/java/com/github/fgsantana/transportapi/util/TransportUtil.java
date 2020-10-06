@@ -3,7 +3,11 @@ package com.github.fgsantana.transportapi.util;
 import com.github.fgsantana.transportapi.dto.TransportDTO;
 import com.github.fgsantana.transportapi.entity.Modal;
 import com.github.fgsantana.transportapi.entity.Transport;
+import org.modelmapper.ModelMapper;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,9 +15,30 @@ import static com.github.fgsantana.transportapi.entity.Modal.Aeroviario;
 import static com.github.fgsantana.transportapi.entity.Modal.Ferroviario;
 
 public class TransportUtil {
+    public static ModelMapper mapper = new ModelMapper();
 
 
-    public static TransportDTO createFakeDTO() {
+    public static void setAsReturnedDTO(TransportDTO targetDTO, TransportDTO sourceDTO) {
+        targetDTO.setId(sourceDTO.getId());
+        targetDTO.setLogoUrl(sourceDTO.getLogoUrl());
+    }
+
+
+    public static TransportDTO toDTO(Transport transport) {
+
+        TransportDTO dto = mapper.map(transport, TransportDTO.class);
+
+        dto.setLogoUrl("http://localhost:8080/api/v1/transports/" + dto.getId() + "/logo");
+        return dto;
+    }
+
+    public static byte[] createTestImg() throws IOException {
+        FileInputStream fis = new FileInputStream(new File("testImg.jpg"));
+        return fis.readAllBytes();
+    }
+
+
+    public static TransportDTO createTestDTO() {
         Modal[] modais = {Aeroviario, Ferroviario};
         List<Modal> lista = Arrays.asList(modais);
         TransportDTO dto = new TransportDTO();
@@ -33,7 +58,7 @@ public class TransportUtil {
         return dto;
     }
 
-    public static Transport createFakeEntity() {
+    public static Transport createTestEntity() {
         Modal[] modais = {Aeroviario, Ferroviario};
         List<Modal> lista = Arrays.asList(modais);
         Transport entity = new Transport();
@@ -53,22 +78,6 @@ public class TransportUtil {
         entity.setNumero(30);
         return entity;
 
-    }
-    public static boolean equalsEntityContent(Transport t1, Transport t2) {
-
-        return t1.getNumero()==t2.getNumero() &&
-                t1.getEmail().equals(t2.getEmail()) &&
-               t1.getNome().equals(t2.getNome()) &&
-                t1.getEmpresa().equals(t2.getEmpresa()) &&
-                t1.getTelefone().equals(t2.getTelefone()) &&
-                t1.getCelular().equals(t2.getCelular()) &&
-                t1.getWhatsapp().equals(t2.getWhatsapp()) &&
-                t1.getModais().containsAll(t2.getModais()) &&
-                t1.getCep().equals( t2.getCep()) &&
-                t1.getUf().equals(t2.getUf()) &&
-                t1.getCidade().equals(t2.getCidade()) &&
-                t1.getBairro().equals(t2.getBairro()) &&
-                t1.getLogradouro().equals(t2.getLogradouro());
     }
 
 
