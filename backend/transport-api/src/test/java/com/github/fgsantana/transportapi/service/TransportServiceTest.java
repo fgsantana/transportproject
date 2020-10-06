@@ -2,6 +2,7 @@ package com.github.fgsantana.transportapi.service;
 
 import com.github.fgsantana.transportapi.dto.TransportDTO;
 import com.github.fgsantana.transportapi.entity.Transport;
+import com.github.fgsantana.transportapi.exception.InvalidCepFormatException;
 import com.github.fgsantana.transportapi.exception.TransportNotFoundException;
 import com.github.fgsantana.transportapi.message.ResponseMessage;
 import com.github.fgsantana.transportapi.repository.TransportRepository;
@@ -31,10 +32,9 @@ public class TransportServiceTest {
     public void testIfIsSaved() {
         TransportDTO dtoToSave = createTestDTO();
         TransportDTO savedDTO = service.saveTransport(dtoToSave);
-        setAsReturnedDTO(dtoToSave, savedDTO);
+        setAsReturnedDTO(dtoToSave, savedDTO.getId());
         assertTrue(repo.existsById(savedDTO.getId()));
         Transport transport = repo.findById(savedDTO.getId()).orElseThrow(() -> new TransportNotFoundException(savedDTO.getId()));
-        ;
         assert (toDTO(transport).equals(dtoToSave));
 
     }
@@ -43,9 +43,18 @@ public class TransportServiceTest {
     public void testIfIsOnTheDtoList() {
         TransportDTO dtoToSave = createTestDTO();
         TransportDTO savedDTO = service.saveTransport(dtoToSave);
-        setAsReturnedDTO(dtoToSave, savedDTO);
+        setAsReturnedDTO(dtoToSave, savedDTO.getId());
         List<TransportDTO> list = service.getTransports();
         assert (list.contains(dtoToSave));
+    }
+
+    @Test
+    public void testIfIsReturnedProperly() {
+        TransportDTO dtoToSave = createTestDTO();
+        Long savedId = repo.save(mapper.map(dtoToSave, Transport.class)).getId();
+        setAsReturnedDTO(dtoToSave, savedId);
+        TransportDTO returnedDTO = service.getTransportById(savedId);
+        assert (returnedDTO.equals(dtoToSave));
     }
 
     @Test
@@ -53,7 +62,7 @@ public class TransportServiceTest {
         TransportDTO dtoToDelete = createTestDTO();
         Transport savedTransport = repo.save(mapper.map(dtoToDelete, Transport.class));
         TransportDTO savedDTO = toDTO(savedTransport);
-        setAsReturnedDTO(dtoToDelete, savedDTO);
+        setAsReturnedDTO(dtoToDelete, savedDTO.getId());
         ResponseMessage msg = service.deleteTransportById(savedTransport.getId());
         assertEquals("Transportadora com id " + savedTransport.getId() + " excluída!", msg.getMessage());
         assertFalse(repo.existsById(savedTransport.getId()));
@@ -68,7 +77,7 @@ public class TransportServiceTest {
         updateDTO.setEmail("updatedEmail@gmail.com");
         updateDTO.setNome("updatedName");
         service.updateTransportById(savedTransport.getId(), updateDTO);
-        Transport transport = repo.findById(savedTransport.getId()).orElseThrow(() -> new TransportNotFoundException(savedTransport.getId()));
+        Transport transport = repo.findById(savedTransport.getId()).get();
 
         assert (toDTO(transport).equals(updateDTO));
     }
@@ -92,6 +101,12 @@ public class TransportServiceTest {
         assert (Arrays.equals(content, returnedFromService));
     }
 
+    @Test
+    public void testIfReturnedNotFoundOnNotFoundCEP() {
+        Long invalidCep = createInvalidCep();
+        assertThrows(InvalidCepFormatException.class, () -> service.getAdressByCep(invalidCep));
 
+
+    }
 }
 

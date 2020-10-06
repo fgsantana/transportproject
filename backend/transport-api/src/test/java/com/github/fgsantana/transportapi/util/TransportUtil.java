@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import static com.github.fgsantana.transportapi.entity.Modal.Aeroviario;
 import static com.github.fgsantana.transportapi.entity.Modal.Ferroviario;
@@ -18,9 +19,9 @@ public class TransportUtil {
     public static ModelMapper mapper = new ModelMapper();
 
 
-    public static void setAsReturnedDTO(TransportDTO targetDTO, TransportDTO sourceDTO) {
-        targetDTO.setId(sourceDTO.getId());
-        targetDTO.setLogoUrl(sourceDTO.getLogoUrl());
+    public static void setAsReturnedDTO(TransportDTO targetDTO, Long id) {
+        targetDTO.setId(id);
+        targetDTO.setLogoUrl("http://localhost:8080/api/v1/transports/" + id + "/logo");
     }
 
 
@@ -35,6 +36,27 @@ public class TransportUtil {
     public static byte[] createTestImg() throws IOException {
         FileInputStream fis = new FileInputStream(new File("testImg.jpg"));
         return fis.readAllBytes();
+    }
+
+    public static Long createInvalidCep() {
+        Random random = new Random();
+        int randomSize;
+
+        do {
+            randomSize = random.nextInt(15);
+        }
+        while (randomSize == 8 || randomSize == 0);
+        String[] arr = new String[randomSize];
+
+        for (int i = 0; i < randomSize; i++) {
+            arr[i] = String.valueOf(random.nextInt(9));
+        }
+        String s = String.join("", arr);
+
+
+        return Long.valueOf(s);
+
+
     }
 
 
