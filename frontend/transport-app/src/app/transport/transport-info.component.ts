@@ -1,16 +1,14 @@
-import { Component, OnInit } from "@angular/core";
-import { Transport } from "./transport";
-import { TransportService } from "./transport.service";
-
+import { Component } from "@angular/core";
+import { Transport } from "./transport"
 
 @Component({
+    selector: "transport-info",
     templateUrl: "./transport-info.component.html"
 })
-export class TransportInfoComponent {
-   
+export class TransportInfoComponent  {
 
-     
+transport: Transport;
 
-   
+
 }
-}
+
