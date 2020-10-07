@@ -1,34 +1,32 @@
 import { TransportService } from './transport.service';
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Transport } from "./transport"
 
 @Component({
     selector: "transport-info",
     templateUrl: "./transport-info.component.html"
 })
-export class TransportInfoComponent {
-    constructor(service: TransportService){}
+export class TransportInfoComponent implements OnInit {
+    constructor(private service: TransportService) { }
+    fileToUpload: File = null;
+    transport: Transport;
+    ngOnInit(): void {
+        this.service.retrieveById(80).subscribe({
+            next: t=>{
+                this.transport = t;
+                console.log('GET api/v1/transports/' + t.id + ' sucessful!');
+            },
+            error: err => {
+                console.log(err);
+            }
+        });
+    
+    }
 
     estados: String[] = ["AC", "AL", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB",
         "PR", "PE", "PI", "RJ", "RN", "RS", "RS", "RO", "RR", "SC", "SP", "SE", "TO"];
 
-    transport: Transport = {
-        id: 1,
-        email: "empresa@gmail.com",
-        nome: "Empresa",
-        empresa: "Transportadora",
-        telefone: "8134537602",
-        celular: "",
-        whatsapp: "",
-        modais: ['Aeroviario', 'Ferroviario', 'Dutoviario'],
-        cep: "12345678",
-        uf: "SP",
-        cidade: "São Paulo",
-        bairro: "Morumbi",
-        logradouro: "Rua Teste",
-        numero: 453,
-        logoUrl: "http://localhost:8080/api/v1/transports/105/logo"
-    }
+
 
 
 
@@ -48,8 +46,8 @@ export class TransportInfoComponent {
             console.log(this.transport.modais)
         }
     }
-    setEstado(estado: string) {
-        this.transport.uf = estado;
-        console.log(this.transport.uf);
-    }
+    
+    
+
+
 }
