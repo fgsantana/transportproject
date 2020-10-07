@@ -9,10 +9,11 @@ import { Transport } from "./transport"
 export class TransportInfoComponent implements OnInit {
     constructor(private service: TransportService) { }
     fileToUpload: File = null;
+    imgHasChanged: boolean = false;
     transport: Transport;
     ngOnInit(): void {
         this.service.retrieveById(80).subscribe({
-            next: t=>{
+            next: t => {
                 this.transport = t;
                 console.log('GET api/v1/transports/' + t.id + ' sucessful!');
             },
@@ -20,7 +21,7 @@ export class TransportInfoComponent implements OnInit {
                 console.log(err);
             }
         });
-    
+
     }
 
     estados: String[] = ["AC", "AL", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB",
@@ -29,6 +30,21 @@ export class TransportInfoComponent implements OnInit {
 
 
 
+
+    update(): void {
+        this.service.update(this.transport).subscribe({
+            next: t => {
+
+                console.log('PUT api/v1/transports/' + 80 + ' sucessful!');
+            },
+            error: err => {
+                console.log(err);
+            }
+        });
+        if (this.imgHasChanged) {
+            this.uploadFileToActivity();
+        }
+    }
 
     s(): void {
         console.log(this.transport)
@@ -46,8 +62,27 @@ export class TransportInfoComponent implements OnInit {
             console.log(this.transport.modais)
         }
     }
-    
-    
+
+    handleFileInput(files: FileList): void {
+        this.fileToUpload = files.item(0);
+        this.imgHasChanged = true;
+
+
+    }
+
+    uploadFileToActivity(): void {
+        this.service.saveLogo(this.fileToUpload).subscribe({
+            next: e => {
+                console.log("Sucess");
+            }
+            , error: err => {
+                console.log(err);
+            }
+        })
+
+    }
+
+
 
 
 }

@@ -53,6 +53,12 @@ export class TransportService {
         return this.httpClient.get<Transport>("http://localhost:8080/api/v1/transports/80")
     }
 
+    saveLogo(fileToUpload: File): Observable<any> {
+        const formData: FormData = new FormData();
+        formData.append('logoImg', fileToUpload);
+        return this.httpClient.put<any>("http://localhost:8080/api/v1/transports/80/logo", formData)
+    }
+
 
 
 

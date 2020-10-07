@@ -70,12 +70,14 @@
         <label> Número</label>
         <input size="4" [(ngModel)]="transport.numero" name="numero" #transportNumero="ngModel">
         <br />
-
         <div>
             <h2 style="align-self: center;">-------Logo-------</h2>
             <img style="width: 150px; height: 150px;" [src]="transport.logoUrl">
         </div>
-
-        <button style="width: 150px;">Salvar</button>
+        <div>
+            <label for="file">Choose File</label>
+            <input type="file" accept="image/*" id="file" (change)="handleFileInput($event.target.files)">
+        </div>
+        <button style="width: 150px;" (click)="update()">Salvar</button>
     </form>
 </div>
