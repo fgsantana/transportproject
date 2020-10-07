@@ -1,18 +1,26 @@
+import { Endereco } from './endereco';
 import { TransportService } from './transport.service';
 import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute } from '@angular/router';
 import { Transport } from "./transport"
 
 @Component({
     selector: "transport-info",
-    templateUrl: "./transport-info.component.html"
+    templateUrl: "./transport-info.component.html",
+    styles : [`.invalido{
+        border-color: red;
+    }`]
 })
 export class TransportInfoComponent implements OnInit {
-    constructor(private service: TransportService) { }
+    constructor(private activatedRoute: ActivatedRoute, private service: TransportService) { }
     fileToUpload: File = null;
     imgHasChanged: boolean = false;
     transport: Transport;
+    endereco: Endereco;
+    cepInvalido: boolean;
+
     ngOnInit(): void {
-        this.service.retrieveById(80).subscribe({
+        this.service.retrieveById(+ this.activatedRoute.snapshot.paramMap.get('id')).subscribe({
             next: t => {
                 this.transport = t;
                 console.log('GET api/v1/transports/' + t.id + ' sucessful!');
@@ -42,10 +50,44 @@ export class TransportInfoComponent implements OnInit {
             }
         });
         if (this.imgHasChanged) {
-            this.uploadFileToActivity();
+            this.service.saveLogo(this.transport.id, this.fileToUpload).subscribe({
+                next: e => {
+                    console.log("Sucess");
+                }
+                , error: err => {
+                    console.log(err);
+                }
+            })
         }
     }
+    semModais(): boolean {
+        return this.transport.modais.length === 0;
+    }
+    isCepInvalido(): boolean {
+        return this.cepInvalido;
+    }
 
+    getAdressByCep(): void {
+        if (this.transport.cep.length === 8) {
+            this.service.getAdressByCep(this.transport.cep).subscribe({
+                next: e => {
+                    this.transport.bairro = e.bairro;
+                    this.transport.cidade = e.localidade;
+                    this.transport.logradouro = e.logradouro;
+                    this.transport.uf = e.uf;
+                    this.cepInvalido = false;
+                    console.log(e, "success");
+
+                },
+                error: err => {
+                    console.log(err, "não encontrado!");
+
+                    this.cepInvalido = true;
+                }
+            });
+        }
+
+    }
     s(): void {
         console.log(this.transport)
     }
@@ -63,24 +105,13 @@ export class TransportInfoComponent implements OnInit {
         }
     }
 
-    handleFileInput(files: FileList): void {
+    setFile(files: FileList): void {
         this.fileToUpload = files.item(0);
         this.imgHasChanged = true;
 
 
     }
 
-    uploadFileToActivity(): void {
-        this.service.saveLogo(this.fileToUpload).subscribe({
-            next: e => {
-                console.log("Sucess");
-            }
-            , error: err => {
-                console.log(err);
-            }
-        })
-
-    }
 
 
 

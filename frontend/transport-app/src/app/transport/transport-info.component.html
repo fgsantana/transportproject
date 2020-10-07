@@ -1,25 +1,31 @@
-<div style="padding-left: 40%; padding-top: 20%;">
+<div style="padding-left: 40%; padding-top: 10%;">
     <form #transportForm="ngForm" *ngIf="transport" (change)="s()">
         <label>E-mail</label>
-        <input [(ngModel)]="transport.email" name="email" #transporteEmail="ngModel">
+        <input required email=true size=30 [(ngModel)]="transport.email" name="email" #transportEmail="ngModel"
+            [ngClass]="{'invalido' : transportEmail.invalid}">
 
         <br />
         <label>Nome</label>
-        <input [(ngModel)]="transport.nome" name="nome" #transportNome="ngModel">
+        <input required minlength="4" size=30 [(ngModel)]="transport.nome" name="nome" #transportNome="ngModel"
+            [ngClass]="{'invalido' : transportNome.invalid}">
         <br />
 
         <label>Empresa</label>
-        <input [(ngModel)]="transport.empresa" name="empresa" #transportEmpresa="ngModel">
+        <input required size=30 [(ngModel)]="transport.empresa" name="empresa" #transportEmpresa="ngModel"
+            [ngClass]="{'invalido' : transportEmpresa.invalid}">
         <br />
 
         <label>Telefone</label>
-        <input size="8" [(ngModel)]="transport.telefone" name="telefone" #transportTelefone="ngModel">
+        <input minlength="10" maxlength="11" required size="8" [(ngModel)]="transport.telefone" name="telefone"
+            #transportTelefone="ngModel" [ngClass]="{'invalido' : transportTelefone.invalid}">
         <br />
         <label>Celular</label>
-        <input size="8" [(ngModel)]="transport.celular" name="celular" #transportCelular="ngModel">
+        <input minlength="10" maxlength="11" size="8" [(ngModel)]="transport.celular" name="celular"
+            #transportCelular="ngModel" [ngClass]="{'invalido' : transportCelular.invalid}">
         <br />
         <label> Whatsapp</label>
-        <input size="8" [(ngModel)]="transport.whatsapp" name="whatsapp" #transportWhatsapp="ngModel">
+        <input minlength="10" maxlength="11" size="8" [(ngModel)]="transport.whatsapp" name="whatsapp"
+            #transportWhatsapp="ngModel" [ngClass]="{'invalido' : transportWhatsapp.invalid}">
 
         <br />
 
@@ -47,28 +53,34 @@
         </div>
         <div>
             <label>CEP</label>
-            <input size="5" [(ngModel)]="transport.cep" name="cep" #transportCep="ngModel">
+            <input minlength="8" maxlength="8" size="5" [(ngModel)]="transport.cep" name="cep" #transportCep="ngModel"
+                (change)="getAdressByCep()" [ngClass]="{'invalido' : isCepInvalido()}"
+                [ngClass]="{'invalido' : transportCep.invalid}">
 
 
             <label>UF</label>
 
-            <select [(ngModel)]="transport.uf" name="uf" #transportUf="ngModel">
+            <select [(ngModel)]="transport.uf" name="uf">
                 <option *ngFor="let e of estados" [ngValue]="e" selected="setEstado(e)">
                     {{e}}
                 </option>
             </select>
         </div>
         <label> Cidade</label>
-        <input size="8" [(ngModel)]="transport.cidade" name="cidade" #transportCidade="ngModel">
+        <input required size="25" [(ngModel)]="transport.cidade" name="cidade" #transportCidade="ngModel"
+            [ngClass]="{'invalido' : transportCidade.invalid}">
         <br />
         <label>Bairro</label>
-        <input size="8" [(ngModel)]="transport.bairro" name="bairro" #transportBairro="ngModel">
+        <input size="20" [(ngModel)]="transport.bairro" name="bairro" #transportBairro="ngModel"
+            [ngClass]="{'invalido' : transportBairro.invalid}">
         <br />
         <label>Rua/Avenido</label>
-        <input size="8" [(ngModel)]="transport.logradouro" name="logradouro" #transportLogradouro="ngModel">
+        <input required size=50 [(ngModel)]="transport.logradouro" name="logradouro" #transportLogradouro="ngModel"
+            [ngClass]="{'invalido' : transportLogradouro.invalid}">
         <br />
         <label> Número</label>
-        <input size="4" [(ngModel)]="transport.numero" name="numero" #transportNumero="ngModel">
+        <input required size="4" [(ngModel)]="transport.numero" name="numero" #transportNumero="ngModel"
+            [ngClass]="{'invalido' : transportNumero.invalid}">
         <br />
         <div>
             <h2 style="align-self: center;">-------Logo-------</h2>
@@ -76,8 +88,12 @@
         </div>
         <div>
             <label for="file">Choose File</label>
-            <input type="file" accept="image/*" id="file" (change)="handleFileInput($event.target.files)">
+            <input type="file" accept="image/*" id="file" (change)="setFile($event.target.files)">
         </div>
-        <button style="width: 150px;" (click)="update()">Salvar</button>
+        <p>.</p>
+        <button [disabled]="isCepInvalido()" [disabled]="semModais()" [disabled]="transportForm.invalid"
+            style="width: 150px;" (click)="update()">Salvar</button>
+        <span>--------------------</span>
+        <button [routerLink]="['/deleteTransport', transport.id]">Delete</button>
     </form>
 </div>
