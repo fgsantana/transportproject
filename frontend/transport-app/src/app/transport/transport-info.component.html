@@ -1,4 +1,30 @@
-<h1>Test</h1>
-<table (ngModel) = "transport">
-    <td>{{transport.id}}</td>
-    </table>
+
+<form *ngIf="transport">
+    
+    <label>E-mail</label>
+    <input [(ngModel)]="transport.email">
+    
+    
+    
+    <label>Modais | </label>
+    <div style="border-color: black;">
+    <input *ngIf="verify('Aeroviario')"  checked type="checkbox"  (change)= "change('Aeroviario')" >
+    <input *ngIf="!verify('Aeroviario')"  type="checkbox"  (change)= "change('Aeroviario')" >
+    <label>Aeroviário</label>
+    <input *ngIf="verify('Ferroviario')"  checked type="checkbox"  (change)= "change('Ferroviario')" >
+    <input *ngIf="!verify('Ferroviario')"  type="checkbox"  (change)= "change('Ferroviario')" >
+    <label>Ferroviário</label>
+    <br/>
+    <input *ngIf="verify('Rodoviario')"  checked type="checkbox"  (change)= "change('Rodoviario')" >
+    <input *ngIf="!verify('Rodoviario')"  type="checkbox"  (change)= "change('Rodoviario')" >
+    <label>Rodoviário</label>
+     <input *ngIf="verify('Hidroviario')"  checked type="checkbox"  (click)= "change('Hidroviario')" >
+    <input *ngIf="!verify('Hidroviario')"  type="checkbox"  (click)= "change('Hidroviario')" >
+    <label>Hidroviario</label>
+    <br/>
+    <input *ngIf="verify('Dutoviario')"  checked type="checkbox"  (change)= "change('Dutoviario')" >
+    <input *ngIf="!verify('Dutoviario')"  type="checkbox"  (change)= "change('Dutoviario')" >
+    <label>Dutoviario</label>
+    </div>
+    
+    </form>
