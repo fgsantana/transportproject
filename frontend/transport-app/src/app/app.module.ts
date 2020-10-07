@@ -1,3 +1,4 @@
+import { TransportListComponent } from './transport/transport-list.component';
 import { DeleteConfirmComponent } from './deleteConfirm/delete-confirm.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -11,6 +12,7 @@ import { AppComponent } from './app.component';
 @NgModule({
   declarations: [
     AppComponent,
+    TransportListComponent,
     TransportInfoComponent,
     DeleteConfirmComponent
     
@@ -20,8 +22,12 @@ import { AppComponent } from './app.component';
     FormsModule,
     HttpClientModule,
     RouterModule.forRoot([
-     { path: 'transports/:id' , component: TransportInfoComponent
-},
+      {
+        path: 'transports/all', component: TransportListComponent
+      },
+     { path: 'transports/:id' , component: TransportInfoComponent},
+     {path: '' , redirectTo: 'TransportListComponent', pathMatch: "full"},
+
 {
   path: 'deleteTransport/:id' ,component: DeleteConfirmComponent 
 }

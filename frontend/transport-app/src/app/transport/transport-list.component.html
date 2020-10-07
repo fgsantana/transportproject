@@ -1,0 +1,64 @@
+<span>
+    Filtrado por:
+    <div>
+        <input size="15" *ngIf="filterByName  " readonly=true value={{filterByName}}>
+        <input size="15" *ngIf="filterByCity  " readonly=true value={{filterByCity}}>
+        <br />
+        <input size="1" *ngIf="filterByUf" readonly=true value={{filterByUf}}>
+        <input size="5" *ngIf="filterByModal" readonly=true value={{filterByModal}}>
+    </div>
+
+    <p>------------------------------------------</p>
+    <label>
+        <h3>Nome:</h3>
+    </label>
+    <input [(ngModel)]="filterByName" (change)="setFilterByName()">
+    <p></p>
+    <label>
+        <h3>Localização</h3>
+    </label>
+
+    <div *ngFor="let uf of getAllUfs()"><button (click)="setFilterByUf(uf)"> {{uf}}</button>
+    </div>
+
+    <label>
+        <h3>Cidade</h3>
+    </label>
+
+    <div *ngFor="let city of getAllCities()"><button (click)="setFilterByCity(city)">
+            {{city}}</button> </div>
+
+    <label>
+        <h3>Modal</h3>
+    </label>
+    <div>
+        <div *ngFor="let modal of getAllModaisFromAll()"><button (click)="setFilterByModal(modal)"> {{modal}}</button>
+        </div>
+
+    </div>
+
+
+
+</span>
+
+<div style="position: absolute;left: 30%;top:10%">
+    <h1>Transportadoras</h1>
+    <div> <button  [routerLink]="['/transports',-1]" style="background-color: darkseagreen; cursor: pointer;">Cadastre sua transportadora</button></div>
+    <table>
+        <tbody>
+            <tr *ngFor="let transport of filteredTransports">
+                <td> <img [src]="transport.logoUrl" width="80"></td>
+                <td><a [routerLink]="['/transports', transport.id]">{{transport.nome}}</a></td>
+                <td>{{transport.telefone}}</td>
+                <td>{{transport.celular}}</td>
+                <td>{{transport.whatsapp}}</td>
+                <td>{{transport.email}}</td>
+
+
+
+
+
+            </tr>
+        </tbody>
+    </table>
+</div>

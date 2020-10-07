@@ -7,7 +7,7 @@ import { Transport } from "./transport"
 @Component({
     selector: "transport-info",
     templateUrl: "./transport-info.component.html",
-    styles : [`.invalido{
+    styles: [`.invalido{
         border-color: red;
     }`]
 })

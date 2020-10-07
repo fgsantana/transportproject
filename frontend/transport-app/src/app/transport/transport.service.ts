@@ -35,6 +35,10 @@ export class TransportService {
             return this.httpClient.delete<any>(this.url + id);
     }
 
+    retrieveAll(): Observable<Transport[]>{
+        return this.httpClient.get<Transport[]>(this.url);
+    }
+
 
 
 
