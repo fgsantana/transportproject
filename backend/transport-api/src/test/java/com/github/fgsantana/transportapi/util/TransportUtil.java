@@ -61,8 +61,7 @@ public class TransportUtil {
 
 
     public static TransportDTO createTestDTO() {
-        Modal[] modais = {Aeroviario, Ferroviario};
-        List<Modal> lista = Arrays.asList(modais);
+        List<Modal> lista = Arrays.asList(Aeroviario, Ferroviario);
         TransportDTO dto = new TransportDTO();
         dto.setEmail("emailteste@gmail.com");
         dto.setNome("Teste Teste");
@@ -70,7 +69,7 @@ public class TransportUtil {
         dto.setTelefone("8112345678");
         dto.setCelular("81987654321");
         dto.setWhatsapp("81987654321");
-        dto.setModais(List.of(Aeroviario, Ferroviario));
+        dto.setModais(lista);
         dto.setCep("12345678");
         dto.setUf("SC");
         dto.setCidade("TesteC");
@@ -81,8 +80,7 @@ public class TransportUtil {
     }
 
     public static Transport createTestEntity() {
-        Modal[] modais = {Aeroviario, Ferroviario};
-        List<Modal> lista = Arrays.asList(modais);
+        List<Modal> lista = Arrays.asList(Aeroviario, Ferroviario);
         Transport entity = new Transport();
         entity.setId(1L);
         entity.setEmail("emailteste@gmail.com");
@@ -91,7 +89,7 @@ public class TransportUtil {
         entity.setTelefone("8112345678");
         entity.setWhatsapp("81987654321");
         entity.setCelular("81987654321");
-        entity.setModais(List.of(Aeroviario, Ferroviario));
+        entity.setModais(lista);
         entity.setCep("12345678");
         entity.setUf("SC");
         entity.setCidade("TesteC");

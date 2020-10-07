@@ -49,10 +49,10 @@ public class TransportService {
 
 
     public TransportDTO updateTransportById(Long id, TransportDTO transportDTO) {
-        exists(id);
-        transportDTO.setId(id);
         Transport transport = repo.findById(id).orElseThrow(() -> new TransportNotFoundException(id));
+        transportDTO.setId(id);
         mapper.map(transportDTO, transport);
+        transport.setModais(transportDTO.getModais());
         return this.mapDTOSetLogoUrl(repo.save(transport));
     }
 
