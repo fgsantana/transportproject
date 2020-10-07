@@ -1,3 +1,4 @@
+import { TransportService } from './transport.service';
 import { Component } from "@angular/core";
 import { Transport } from "./transport"
 
@@ -6,6 +7,7 @@ import { Transport } from "./transport"
     templateUrl: "./transport-info.component.html"
 })
 export class TransportInfoComponent {
+    constructor(service: TransportService){}
 
     estados: String[] = ["AC", "AL", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB",
         "PR", "PE", "PI", "RJ", "RN", "RS", "RS", "RO", "RR", "SC", "SP", "SE", "TO"];
