@@ -43,7 +43,7 @@
 
 <div style="position: absolute;left: 30%;top:10%">
     <h1>Transportadoras</h1>
-    <div> <button  [routerLink]="['/transports',-1]" style="background-color: darkseagreen; cursor: pointer;">Cadastre sua transportadora</button></div>
+    <div> <button  [routerLink]="['create']" style="background-color: darkseagreen; cursor: pointer;">Cadastre sua transportadora</button></div>
     <table>
         <tbody>
             <tr *ngFor="let transport of filteredTransports">

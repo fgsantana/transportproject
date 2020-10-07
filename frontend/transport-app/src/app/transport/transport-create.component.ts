@@ -1,37 +1,28 @@
 import { Endereco } from './endereco';
 import { TransportService } from './transport.service';
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from '@angular/router';
 import { Transport } from "./transport"
 
 @Component({
-    selector: "transport-info",
-    templateUrl: "./transport-info.component.html",
+    templateUrl: "./transport-create.component.html",
     styles: [`.invalido{
         border-color: red;
     }`]
 })
-export class TransportInfoComponent implements OnInit {
-    constructor(private activatedRoute: ActivatedRoute, private service: TransportService) { }
+export class TransportCreateComponent implements OnInit {
+    constructor(private service: TransportService) { }
     fileToUpload: File = null;
     imgHasChanged: boolean = false;
-    transport: Transport;
+    transport: Transport = new Transport();
     endereco: Endereco;
     cepInvalido: boolean;
 
-
     ngOnInit(): void {
-        this.service.retrieveById(+ this.activatedRoute.snapshot.paramMap.get('id')).subscribe({
-            next: t => {
-                this.transport = t;
-                console.log('GET api/v1/transports/' + t.id + ' sucessful!');
-            },
-            error: err => {
-                console.log(err);
-            }
-        });
-
+        this.transport.modais = [];
     }
+
+
+
 
     estados: String[] = ["AC", "AL", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB",
         "PR", "PE", "PI", "RJ", "RN", "RS", "RS", "RO", "RR", "SC", "SP", "SE", "TO"];
@@ -40,26 +31,26 @@ export class TransportInfoComponent implements OnInit {
 
 
 
-    update(): void {
-        this.service.update(this.transport).subscribe({
+    create(): void {
+        this.service.create(this.transport).subscribe({
             next: t => {
+                if (this.imgHasChanged) {
+                    this.service.saveLogo(t.id, this.fileToUpload).subscribe({
+                        next: e => {
+                            console.log("PUT logo success");
+                        }
+                        , error: err => {
+                            console.log(err);
+                        }
+                    })
+                }
+                console.log('POST api/v1/transports/' + t.id + ' sucessful!');
 
-                console.log('PUT api/v1/transports/' + 80 + ' sucessful!');
             },
             error: err => {
                 console.log(err);
             }
         });
-        if (this.imgHasChanged) {
-            this.service.saveLogo(this.transport.id, this.fileToUpload).subscribe({
-                next: e => {
-                    console.log("Sucess");
-                }
-                , error: err => {
-                    console.log(err);
-                }
-            })
-        }
     }
     semModais(): boolean {
         return this.transport.modais.length === 0;

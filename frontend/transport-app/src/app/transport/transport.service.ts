@@ -12,6 +12,10 @@ export class TransportService {
 
 
 
+    create(transport: Transport): Observable<Transport> {
+        return this.httpClient.post<Transport>(this.url, transport);
+    }
+
     update(transport: Transport): Observable<Transport> {
         return this.httpClient.put<Transport>(this.url + transport.id, transport);
     }
@@ -31,11 +35,11 @@ export class TransportService {
         return this.httpClient.get<Endereco>(this.url + "adress/" + cep);
     }
 
-    deleteTransport(id : number): Observable<any>{
-            return this.httpClient.delete<any>(this.url + id);
+    deleteTransport(id: number): Observable<any> {
+        return this.httpClient.delete<any>(this.url + id);
     }
 
-    retrieveAll(): Observable<Transport[]>{
+    retrieveAll(): Observable<Transport[]> {
         return this.httpClient.get<Transport[]>(this.url);
     }
 

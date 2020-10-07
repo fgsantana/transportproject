@@ -9,10 +9,8 @@ import { TitleCasePipe } from '@angular/common';
 })
 export class TransportListComponent implements OnInit {
     constructor(private service: TransportService) { }
-    filteredTransports: Transport[];
-    preFilter: Transport[];
-    transports: Transport[];
-    temp: Transport[];
+    filteredTransports: Transport[]=[];
+    transports: Transport[]=[];
     filterByName: string;
     filterByUf: string;
     filterByCity: string;
@@ -63,7 +61,7 @@ export class TransportListComponent implements OnInit {
         this.filteredTransports = this.transports;
         
         this.filterByModal = modal;
-        this.filteredTransports = this.filteredTransports.filter(t => !(t.modais.indexOf(modal) > -1))
+        this.filteredTransports = this.filteredTransports.filter(t => (t.modais.indexOf(modal) > -1))
 
     }
     setFilterByName(): void {

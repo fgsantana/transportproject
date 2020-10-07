@@ -29,7 +29,7 @@ public class TransportDTO {
     @Size(min = 10, max = 11)
     private String telefone;
 
-    @Size(min = 11, max = 11)
+    @Size(min = 10, max = 11)
     private String celular;
 
     @Size(min = 10, max = 11)
