@@ -1,30 +1,81 @@
+<div style="padding-left: 40%; padding-top: 20%;">
+    <form #transportForm="ngForm" *ngIf="transport" (change)="s()">
+        <label>E-mail</label>
+        <input [(ngModel)]="transport.email" name="email" #transporteEmail="ngModel">
 
-<form *ngIf="transport">
-    
-    <label>E-mail</label>
-    <input [(ngModel)]="transport.email">
-    
-    
-    
-    <label>Modais | </label>
-    <div style="border-color: black;">
-    <input *ngIf="verify('Aeroviario')"  checked type="checkbox"  (change)= "change('Aeroviario')" >
-    <input *ngIf="!verify('Aeroviario')"  type="checkbox"  (change)= "change('Aeroviario')" >
-    <label>Aeroviário</label>
-    <input *ngIf="verify('Ferroviario')"  checked type="checkbox"  (change)= "change('Ferroviario')" >
-    <input *ngIf="!verify('Ferroviario')"  type="checkbox"  (change)= "change('Ferroviario')" >
-    <label>Ferroviário</label>
-    <br/>
-    <input *ngIf="verify('Rodoviario')"  checked type="checkbox"  (change)= "change('Rodoviario')" >
-    <input *ngIf="!verify('Rodoviario')"  type="checkbox"  (change)= "change('Rodoviario')" >
-    <label>Rodoviário</label>
-     <input *ngIf="verify('Hidroviario')"  checked type="checkbox"  (click)= "change('Hidroviario')" >
-    <input *ngIf="!verify('Hidroviario')"  type="checkbox"  (click)= "change('Hidroviario')" >
-    <label>Hidroviario</label>
-    <br/>
-    <input *ngIf="verify('Dutoviario')"  checked type="checkbox"  (change)= "change('Dutoviario')" >
-    <input *ngIf="!verify('Dutoviario')"  type="checkbox"  (change)= "change('Dutoviario')" >
-    <label>Dutoviario</label>
-    </div>
-    
+        <br />
+        <label>Nome</label>
+        <input [(ngModel)]="transport.nome" name="nome" #transportNome="ngModel">
+        <br />
+
+        <label>Empresa</label>
+        <input [(ngModel)]="transport.empresa" name="empresa" #transportEmpresa="ngModel">
+        <br />
+
+        <label>Telefone</label>
+        <input size="8" [(ngModel)]="transport.telefone" name="telefone" #transportTelefone="ngModel">
+        <br />
+        <label>Celular</label>
+        <input size="8" [(ngModel)]="transport.celular" name="celular" #transportCelular="ngModel">
+        <br />
+        <label> Whatsapp</label>
+        <input size="8" [(ngModel)]="transport.whatsapp" name="whatsapp" #transportWhatsapp="ngModel">
+
+        <br />
+
+        <div style="border-color: black;">
+            <p><label style="align-self: center;">-----------Modais------------</label></p>
+
+            <input *ngIf="verify('Aeroviario')" checked type="checkbox" (change)="change('Aeroviario')">
+            <input *ngIf="!verify('Aeroviario')" type="checkbox" (change)="change('Aeroviario')">
+            <label>Aeroviário</label>
+            <input *ngIf="verify('Ferroviario')" checked type="checkbox" (change)="change('Ferroviario')">
+            <input *ngIf="!verify('Ferroviario')" type="checkbox" (change)="change('Ferroviario')">
+            <label>Ferroviário</label>
+            <br />
+            <input *ngIf="verify('Rodoviario')" checked type="checkbox" (change)="change('Rodoviario')">
+            <input *ngIf="!verify('Rodoviario')" type="checkbox" (change)="change('Rodoviario')">
+            <label>Rodoviário</label>
+            <input *ngIf="verify('Hidroviario')" checked type="checkbox" (click)="change('Hidroviario')">
+            <input *ngIf="!verify('Hidroviario')" type="checkbox" (click)="change('Hidroviario')">
+            <label>Hidroviario</label>
+            <br />
+            <input *ngIf="verify('Dutoviario')" checked type="checkbox" (change)="change('Dutoviario')">
+            <input *ngIf="!verify('Dutoviario')" type="checkbox" (change)="change('Dutoviario')">
+            <label>Dutoviario</label>
+            <p>--------------------------------</p>
+        </div>
+        <div>
+            <label>CEP</label>
+            <input size="5" [(ngModel)]="transport.cep" name="cep" #transportCep="ngModel">
+
+
+            <label>UF</label>
+
+            <select [(ngModel)]="transport.uf" name="uf" #transportUf="ngModel">
+                <option *ngFor="let e of estados" [ngValue]="e" selected="setEstado(e)">
+                    {{e}}
+                </option>
+            </select>
+        </div>
+        <label> Cidade</label>
+        <input size="8" [(ngModel)]="transport.cidade" name="cidade" #transportCidade="ngModel">
+        <br />
+        <label>Bairro</label>
+        <input size="8" [(ngModel)]="transport.bairro" name="bairro" #transportBairro="ngModel">
+        <br />
+        <label>Rua/Avenido</label>
+        <input size="8" [(ngModel)]="transport.logradouro" name="logradouro" #transportLogradouro="ngModel">
+        <br />
+        <label> Número</label>
+        <input size="4" [(ngModel)]="transport.numero" name="numero" #transportNumero="ngModel">
+        <br />
+
+        <div>
+        <h2 style="align-self: center;">-------Logo-------</h2>
+            <img style="width: 150px; height: 150px;" [src]="transport.logoUrl">
+        </div>
+
+        <button style="width: 150px;">Salvar</button>
     </form>
+</div>
