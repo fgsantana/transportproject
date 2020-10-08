@@ -24,6 +24,11 @@ public class TransportResource {
     @Autowired
     private TransportService service;
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public TransportDTO saveTransport(@Valid @RequestBody TransportDTO transportDTO) {
+        return service.saveTransport(transportDTO);
+    }
 
     @GetMapping
     public List<TransportDTO> getTransports() {
@@ -34,22 +39,6 @@ public class TransportResource {
     @GetMapping("/{id}")
     public TransportDTO getTransportById(@PathVariable("id") Long id) {
         return service.getTransportById(id);
-    }
-
-    @GetMapping(value = "/{id}/logo", produces = MediaType.IMAGE_JPEG_VALUE)
-    public byte[] getLogoByTransportId(@PathVariable("id") Long id) {
-        return service.getLogoByTransportId(id);
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public TransportDTO saveTransport(@Valid @RequestBody TransportDTO transportDTO) {
-        return service.saveTransport(transportDTO);
-    }
-
-    @PutMapping(value = "/{id}/logo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseMessage insertLogoOnTransportById(@PathVariable("id") Long id, @RequestBody MultipartFile logoImg) throws IOException {
-        return service.insertLogoOnTransportById(id, logoImg.getBytes());
     }
 
     @PutMapping("/{id}")
@@ -66,6 +55,21 @@ public class TransportResource {
     public EnderecoDTO getAdressByCep(@PathVariable("cep") Long cep) throws CepNotFoundException, InvalidCepFormatException {
 
         return service.getAdressByCep(cep);
+    }
+
+    @GetMapping(value = "/{id}/logo", produces = MediaType.IMAGE_JPEG_VALUE)
+    public byte[] getLogoByTransportId(@PathVariable("id") Long id) {
+        return service.getLogoByTransportId(id);
+    }
+
+    @PutMapping(value = "/{id}/logo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseMessage insertLogoOnTransportById(@PathVariable("id") Long id, @RequestBody MultipartFile logoImg) throws IOException {
+        return service.insertLogoOnTransportById(id, logoImg.getBytes());
+    }
+
+    @DeleteMapping("/{id}/logo")
+    public ResponseMessage deleteLogoByTransportId(@PathVariable("id") Long id) {
+        return service.deleteLogoByTransportId(id);
     }
 
 

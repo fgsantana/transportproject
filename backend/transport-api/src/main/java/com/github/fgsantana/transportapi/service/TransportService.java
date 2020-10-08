@@ -74,6 +74,13 @@ public class TransportService {
         return new ResponseMessage("Logo da transportadora de id " + id + " salva!");
     }
 
+    public ResponseMessage deleteLogoByTransportId(Long id) {
+        exists(id);
+        repo.deleteLogoById(id);
+        return new ResponseMessage("Logo da transportadora com id " + id + "excluída!");
+    }
+
+
     public EnderecoDTO getAdressByCep(Long cep) throws InvalidCepFormatException, CepNotFoundException {
         if (cep.toString().length() != 8) {
             throw new InvalidCepFormatException();
@@ -94,5 +101,5 @@ public class TransportService {
             throw new TransportNotFoundException(id);
         }
     }
-
 }
+

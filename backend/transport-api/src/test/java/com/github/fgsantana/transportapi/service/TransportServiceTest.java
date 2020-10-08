@@ -7,6 +7,7 @@ import com.github.fgsantana.transportapi.exception.InvalidCepFormatException;
 import com.github.fgsantana.transportapi.exception.TransportNotFoundException;
 import com.github.fgsantana.transportapi.message.ResponseMessage;
 import com.github.fgsantana.transportapi.repository.TransportRepository;
+import com.github.fgsantana.transportapi.util.TransportUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -69,8 +70,9 @@ public class TransportServiceTest {
         ResponseMessage msg = service.deleteTransportById(savedTransport.getId());
         assertEquals("Transportadora com id " + savedTransport.getId() + " excluída!", msg.getMessage());
         assertFalse(repo.existsById(savedTransport.getId()));
-
     }
+    
+
 
     @Test
     public void testIfUpdated() {
@@ -82,7 +84,7 @@ public class TransportServiceTest {
         List<Modal> lista = Collections.singletonList(Dutoviario);
         updateDTO.setModais(lista);
         service.updateTransportById(savedTransport.getId(), updateDTO);
-        Transport transport = repo.findById(savedTransport.getId()).get();
+        Transport transport = repo.findById(updateDTO.getId()).orElseThrow(() -> new TransportNotFoundException(updateDTO.getId()));
 
         assert (toDTO(transport).equals(updateDTO));
 
@@ -112,5 +114,6 @@ public class TransportServiceTest {
         Long invalidCep = createInvalidCep();
         assertThrows(InvalidCepFormatException.class, () -> service.getAdressByCep(invalidCep));
     }
+
 }
 
