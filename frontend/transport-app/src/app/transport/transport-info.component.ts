@@ -20,7 +20,9 @@ export class TransportInfoComponent implements OnInit {
     cepInvalido: boolean;
 
 
+
     ngOnInit(): void {
+
         this.service.retrieveById(+ this.activatedRoute.snapshot.paramMap.get('id')).subscribe({
             next: t => {
                 this.transport = t;
@@ -51,6 +53,7 @@ export class TransportInfoComponent implements OnInit {
             }
         });
         if (this.imgHasChanged) {
+
             this.service.saveLogo(this.transport.id, this.fileToUpload).subscribe({
                 next: e => {
                     console.log("Sucess");
@@ -69,15 +72,24 @@ export class TransportInfoComponent implements OnInit {
     }
 
     getAdressByCep(): void {
+        this.transport.bairro = "";
+        this.transport.logradouro = "";
+        this.transport.cidade = "";
+        this.transport.uf = "";
         if (this.transport.cep.length === 8) {
             this.service.getAdressByCep(this.transport.cep).subscribe({
                 next: e => {
-                    this.transport.bairro = e.bairro;
-                    this.transport.cidade = e.localidade;
-                    this.transport.logradouro = e.logradouro;
-                    this.transport.uf = e.uf;
-                    this.cepInvalido = false;
-                    console.log(e, "success");
+                    if (e.cep === null) {
+                        this.cepInvalido = true;
+                    }
+                    else {
+                        this.transport.bairro = e.bairro;
+                        this.transport.cidade = e.localidade;
+                        this.transport.logradouro = e.logradouro;
+                        this.transport.uf = e.uf;
+                        this.cepInvalido = false;
+                        console.log(e, "success");
+                    }
 
                 },
                 error: err => {

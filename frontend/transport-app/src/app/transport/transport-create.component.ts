@@ -61,14 +61,23 @@ export class TransportCreateComponent implements OnInit {
 
     getAdressByCep(): void {
         if (this.transport.cep.length === 8) {
+            this.transport.bairro = "";
+            this.transport.logradouro = "";
+            this.transport.cidade = "";
+            this.transport.uf = "";
             this.service.getAdressByCep(this.transport.cep).subscribe({
                 next: e => {
-                    this.transport.bairro = e.bairro;
-                    this.transport.cidade = e.localidade;
-                    this.transport.logradouro = e.logradouro;
-                    this.transport.uf = e.uf;
-                    this.cepInvalido = false;
-                    console.log(e, "success");
+                    if (e.cep === null) {
+                        this.cepInvalido = true;
+                    }
+                    else {
+                        this.transport.bairro = e.bairro;
+                        this.transport.cidade = e.localidade;
+                        this.transport.logradouro = e.logradouro;
+                        this.transport.uf = e.uf;
+                        this.cepInvalido = false;
+                        console.log(e, "success");
+                    }
 
                 },
                 error: err => {

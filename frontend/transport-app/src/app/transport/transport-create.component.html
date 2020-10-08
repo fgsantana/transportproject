@@ -57,9 +57,8 @@
         </div>
         <div>
             <label>CEP</label>
-            <input  minlength="8" maxlength="8" size="5" [(ngModel)]="transport.cep" name="cep" #transportCep="ngModel"
-                (change)="getAdressByCep()"  [ngClass]="{'invalido' : isCepInvalido()}"
-                [ngClass]="{'invalido' : transportCep.invalid}">
+            <input minlength="8" maxlength="8" size="5" [(ngModel)]="transport.cep" name="cep" #transportCep="ngModel"
+                (change)="getAdressByCep()" [ngClass]="{'invalido' : transportCep.invalid || isCepInvalido()}">
 
 
             <label>UF</label>

@@ -1,7 +1,7 @@
 <div style="padding-left: 40%; padding-top: 10%;">
     <div style="padding-bottom: 30px;">
         <button [routerLink]="['/transports/all']">
-            <-------</button>
+            <------- </button>
     </div>
     <form #transportForm="ngForm" *ngIf="transport" (change)="s()">
         <label>E-mail</label>
@@ -58,8 +58,7 @@
         <div>
             <label>CEP</label>
             <input minlength="8" maxlength="8" size="5" [(ngModel)]="transport.cep" name="cep" #transportCep="ngModel"
-                (change)="getAdressByCep()" [ngClass]="{'invalido' : isCepInvalido()}"
-                [ngClass]="{'invalido' : transportCep.invalid}">
+                (change)="getAdressByCep()" [ngClass]="{'invalido' : transportCep.invalid || isCepInvalido()}">
 
 
             <label>UF</label>
@@ -92,13 +91,13 @@
         </div>
         <div>
             <label for="file">Logo</label>
-            <input type="file" accept="image/*" id="file" (change)="setFile($event.target.files)">
+            <input type="file" id="file" (change)="setFile($event.target.files)">
         </div>
         <p>.</p>
         <button [disabled]="true" *ngIf="transportForm.invalid==true || isCepInvalido() || semModais()">Salvar</button>
-        <button  style= "padding: 10px;" *ngIf="!(transportForm.invalid==true || isCepInvalido() || semModais())" (click)="update()"
-            [routerLink]="['/transports/all']">Salvar</button>
-            ---------------------------------------------------
-            <button [routerLink]="['/deleteTransport', transport.id]">Excluir</button>
+        <button style="padding: 10px;" *ngIf="!(transportForm.invalid==true || isCepInvalido() || semModais())"
+            (click)="update()" [routerLink]="['/transports/all']">Salvar</button>
+        ---------------------------------------------------
+        <button [routerLink]="['/deleteTransport', transport.id]">Excluir</button>
     </form>
 </div>
