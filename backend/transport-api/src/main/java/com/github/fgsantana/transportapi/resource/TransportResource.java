@@ -64,7 +64,7 @@ public class TransportResource {
 
     @PutMapping(value = "/{id}/logo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseMessage insertLogoOnTransportById(@PathVariable("id") Long id, @RequestBody MultipartFile logoImg) throws IOException {
-        return service.insertLogoOnTransportById(id, logoImg.getBytes());
+        return service.updateLogoOnTransportById(id, logoImg.getBytes());
     }
 
     @DeleteMapping("/{id}/logo")

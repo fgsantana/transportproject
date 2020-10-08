@@ -7,7 +7,6 @@ import com.github.fgsantana.transportapi.exception.InvalidCepFormatException;
 import com.github.fgsantana.transportapi.exception.TransportNotFoundException;
 import com.github.fgsantana.transportapi.message.ResponseMessage;
 import com.github.fgsantana.transportapi.repository.TransportRepository;
-import com.github.fgsantana.transportapi.util.TransportUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,10 +34,10 @@ public class TransportServiceTest {
     @Test
     public void testIfIsSaved() {
         TransportDTO dtoToSave = createTestDTO();
-        TransportDTO savedDTO = service.saveTransport(dtoToSave);
-        setAsReturnedDTO(dtoToSave, savedDTO.getId());
-        assertTrue(repo.existsById(savedDTO.getId()));
-        Transport transport = repo.findById(savedDTO.getId()).orElseThrow(() -> new TransportNotFoundException(savedDTO.getId()));
+        Long id = service.saveTransport(dtoToSave).getId();
+        setAsReturnedDTO(dtoToSave, id);
+        assertTrue(repo.existsById(id));
+        Transport transport = repo.findById(id).orElseThrow(() -> new TransportNotFoundException(id));
         assert (toDTO(transport).equals(dtoToSave));
 
     }
@@ -46,8 +45,8 @@ public class TransportServiceTest {
     @Test
     public void testIfIsOnTheDtoList() {
         TransportDTO dtoToSave = createTestDTO();
-        TransportDTO savedDTO = service.saveTransport(dtoToSave);
-        setAsReturnedDTO(dtoToSave, savedDTO.getId());
+        Long id = repo.save(mapper.map(dtoToSave, Transport.class)).getId();
+        setAsReturnedDTO(dtoToSave, id);
         List<TransportDTO> list = service.getTransports();
         assert (list.contains(dtoToSave));
     }
@@ -71,7 +70,53 @@ public class TransportServiceTest {
         assertEquals("Transportadora com id " + savedTransport.getId() + " excluída!", msg.getMessage());
         assertFalse(repo.existsById(savedTransport.getId()));
     }
-    
+
+    @Test
+    public void testIfIsNotInTheListOfDTOIfDeleted() {
+        TransportDTO dtoToSave = createTestDTO();
+        Long savedId = repo.save(mapper.map(dtoToSave, Transport.class)).getId();
+        setAsReturnedDTO(dtoToSave, savedId);
+        repo.deleteById(savedId);
+        assert (!service.getTransports().contains(dtoToSave));
+
+    }
+
+    @Test
+    public void testNotFoundExceptionOnFind() {
+        Long id = repo.save(createTestEntity()).getId();
+        repo.deleteById(id);
+        assertThrows(TransportNotFoundException.class, () -> service.getTransportById(id));
+
+    }
+
+    @Test
+    public void testNotFoundExceptionOnUpdate() {
+        Long id = repo.save(createTestEntity()).getId();
+        repo.deleteById(id);
+        assertThrows(TransportNotFoundException.class, () -> service.updateTransportById(id, createTestDTO()));
+
+    }
+
+    @Test
+    public void testNotFoundExceptionOnDelete() {
+        Long id = repo.save(createTestEntity()).getId();
+        repo.deleteById(id);
+        assertThrows(TransportNotFoundException.class, () -> service.deleteTransportById(id));
+    }
+
+    @Test
+    public void testNotFoundExceptionOnInsertOrUpdateLogo() {
+        Long id = repo.save(createTestEntity()).getId();
+        repo.deleteById(id);
+        assertThrows(TransportNotFoundException.class, () -> service.updateLogoOnTransportById(id, createTestImg()));
+    }
+
+    @Test
+    public void testNotFoundExceptionOnDeleteLogo() {
+        Long id = repo.save(createTestEntity()).getId();
+        repo.deleteById(id);
+        assertThrows(TransportNotFoundException.class, () -> service.deleteLogoByTransportId(id));
+    }
 
 
     @Test
@@ -95,7 +140,7 @@ public class TransportServiceTest {
         byte[] content = createTestImg();
         Transport entity = createTestEntity();
         Long id = repo.save(entity).getId();
-        service.insertLogoOnTransportById(id, content);
+        service.updateLogoOnTransportById(id, content);
         assert (Arrays.equals(repo.getLogoByid(id), content));
     }
 

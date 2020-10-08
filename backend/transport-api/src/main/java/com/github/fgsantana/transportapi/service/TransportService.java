@@ -67,7 +67,7 @@ public class TransportService {
         return repo.getLogoByid(id);
     }
 
-    public ResponseMessage insertLogoOnTransportById(Long id, byte[] logo) {
+    public ResponseMessage updateLogoOnTransportById(Long id, byte[] logo) {
         Transport transport = repo.findById(id).orElseThrow(() -> new TransportNotFoundException(id));
         transport.setLogo(logo);
         repo.save(transport);
